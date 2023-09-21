@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Caesar's Shift</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="./styles.css">
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/HTML-CSS"],
+    tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]}
+  });
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<!--
+<script src="caesarShift3.js"></script>
+-->
+
+
+
+</head>
+<body>
+
+<div class="w3-container">					<!-- Begin   <div class="s3-container"> --->
+  <h2>Caesar's Shift</h2>
+
+  <div class="w3-row">						<!-- Begin  <div class="w3-row">   --->
+    <a href="javascript:void(0)" onclick="openCity(event, 'Cipher');">
+      <div class="w3-quarter tablink w3-bottombar w3-hover-light-grey w3-padding  w3-border-red">Cipher</div>
+    </a>
+    <a href="javascript:void(0)" onclick="openCity(event, 'Circular');">
+      <div class="w3-quarter tablink w3-bottombar w3-hover-light-grey w3-padding">Disk Form</div>
+    </a>
+    <a href="javascript:void(0)" onclick="openCity(event, 'Table');">
+      <div class="w3-quarter tablink w3-bottombar w3-hover-light-grey w3-padding">Table Form</div>
+    </a>
+    <a href="javascript:void(0)" onclick="openCity(event, 'Decipher');">
+      <div class="w3-quarter tablink w3-bottombar w3-hover-light-grey w3-padding">Decipher</div>
+    </a>
+  </div>						             <!-- End of  <div class="w3-row">  --->
+
+
+
+  <div id="Cipher" class="w3-container city">      <!-- Begin of <div id="cipher ...>         -->
+    <h2 class="w3-center">Cipher Using Caesar's Shift</h2>
+
+
+
+    <h4 class="w3-teal"> 1. Introduction</h4>
+    <p>Caesar's Shift is the one of the oldest cryptography methods. It was designed by Julius Caesar (100 BC – 44 BC).
+      It is also one of the simplest cryptography methods. 
+       The shift is basically shifting each alphabet inside a plaintext to a fixed number of distance to the right. For instance, 
+      the word "GOODMORNING" will be ciphered as "jrrgpruqlqj", if each alphabet is shifted 3 positions to the right. 
+      For instance, "G" is mapped to "j", "O" is mapped to "r", etc.
+      Here, we use upper case for plaintext, and lower case
+      for ciphertext. Punctuations and all non-alphabetic symbols in the plaintext are removed for convenience.  
+	</p>
+
+
+
+
+    <h4 class="w3-teal"> 2. Mathematical Representation </h4>
+		<p>Mathemaitcally, we can write the Caesar's shift as a function from the set 26 alphabtes to itself. 
+		</p>
+		<p>
+		\begin{align}
+		f : &  \{A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z\} \\
+		\rightarrow & \{A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z\} \\
+		e.g., & f(A) = A+4 = E, \\
+        & f(B)= B+4=F,\\
+		& f(C) =  C+ 4 =G,\\
+		& ...\\
+		& f(V)= V+4=Z,\\
+		& f(W)= W+4 = A,\\
+		& f(X)= X+4= B,\\
+		& f(Y)= Y+4 = C, and\\
+		& f(Z)= Z+4= D\\
+		\end{align}
+		</p>
+
+		<p>
+		In above example, "W" is shifted to "A", which comes around to the beginning of alphabets, and "X" shifted to "B", "Y" to "C" and "Z" to "D". 
+		</p>
+		<p>In ASCII table, upper case alphabets are coded by integers from 65 to 90, meaning 
+		character 'A' is coded as integer 65 in computers, "B" is coded as 66, and 
+		'Z' is coded as integer 90 in computers. Above function can be rewriten as 
+
+
+		\begin{align}
+		f :  & \{65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,83,84,85,86,87,88,89, 90\} \\
+		\rightarrow &  \{65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,83,84,85,86,87,88,89, 90\} \\
+		\\
+		\\
+		 & f(65) =   65+4=69\\
+		&f(66) = 66+4 = 70\\
+		& ...\\
+		& f(86)=86+4 = 90\\
+		& f(87) = 87 + 4 = 91?\\
+		\end{align}
+		</p>
+		<p>The same issue occurs for \(f(87) = 87+4=91 \). What we need is \(f(87) = 65\). So we have a question here, i.e.,  how to write 
+		a mathematical function that will work in the way desired?</p>
+
+
+
+	<h4 class="w3-teal">3. Modular Arithmetic</h4>
+   <p> The coming around situation in above section can easily be described by a mathematical
+operation, which is the so-called modular arithemtic. Roughly speaking, modular arithemtic is an arithmetic (i.e., plus, 
+minus, multiplication, division) about remainders. For instance, when doing the division, we usually care about the quotient. 
+For instance, 13 divided by 3 is roughly 4. The actual value is 4.333..., or 13 divided by 3 is 4 plus remainder 1. 
+We usually ignore the decimal part (or the remainder) and get the whole part (or the quotient) as answer.</p>
+
+<p> In mathematics, 
+we write the quotient as 4=13 DIV 3, and the remainer as 1=13 MOD 3. In most programming language, we can even write
+the quotient as 4 = 13/3  and the remainer as 1= 13 %4. 
+</p>
+
+<p> Let us define a new function.
+\begin{align}
+g:  & \{0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24, 25\} \\
+\rightarrow &  \{0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24, 25\} \\
+and &: g(x) = (x+4) (MOD ~26)\\
+\end{align}
+</p>
+<p>     Then,
+\begin{align}
+  x &: g(x)\\
+  1 &: g(1) = (1+4) (MOD ~26) = 5\\
+  2 &: g(2) = (2+4) (MOD ~26) = 6\\
+     & ...\\
+  22&: g(22) = (22+4) (MOD ~26) = 26 (MOD ~26) = 0\\  
+  23&: g(23) = (23+4) (MOD ~26) = 27 (MOD ~26) = 1\\
+  24&: g(24) = (24+4) (MOD ~26) = 28 (MOD ~26) = 2\\
+  25&: g(25) = (25+4) (MOD ~26) = 29 (MOD ~26) = 3\\
+\end{align}
+</p>
+<!-- Reference: https://www.tuhh.de/MathJax/test/sample.html -->
+  <p >
+      The relationship between \(f(x), g(x)\) can be described by \(f(x) = g(x-65)+65\). Here, x takes values within 65 and 90, but
+\(g(x)\) only works on values within 0 and 25. So we use \(x-65\) as input for \(g(x)\). After the output of \(g(x)\), we add back
+65, and get an output within 65 and 90 as for the output of \(f(x)\).
+  </p>
+
+
+
+
+<h4 class="w3-teal"> 4. Try It Yourself </h4>
+ <p>You can try following snippet for Caesar's shift ciphering.</p>
+<!--  may not work well with tabs  
+    <form   name="myForm"   onsubmit="caesarShift()" >
+    <label  for="inputPlaintext">Enter a plaintext. All punctuations will be removed.</label><br>
+    <input type="text" id="inputPlaintext" name="inputPlaintext"><br>
+    <input type="submit" value="Submit">		
+    </form>
+-->
+
+    <br><br>
+    <div  name="myForm" class="w3-container w3-border" style="width: 100%";>
+       <div class="w3-cell-row w3-border-bottom ">
+       <div class="w3-container w3-cell w3-border-right" style="overflow: auto;">
+
+ 	    <label  for="inputPlaintext1">Enter a plaintext. All non-alphabetic symbols will be removed, 
+                                                               and the plaintext will be converted to
+                                                               upper case.</label><br>
+	   <input type="text" id="inputPlaintext1" name="inputPlaintext1"><br>
+       </div>
+       <div class="w3-container w3-cell w3-cell-bottom">	
+	    <label for="cshiftOption1">Choose a shift:</label><br>
+	    <select id="cshiftOption1" name="cshiftOption1" >
+	    </select>
+       </div>
+       </div>
+       <br>
+	   
+       <button type="button" onclick="process_cipher()">Cipher</button>	
+
+       <div class="w3-card">
+		<div id="originalText1" class="w3-panel"></div>
+		<div id="cleanPlaintext1" class="w3-panel"></div>
+		<div id="shiftDistance1" class="w3-panel"></div>
+		<div id="ciphertextResult1" class="w3-panel"></div>
+       </div>	
+    </div>
+    <br><br>
+
+
+  
+    <br><br>
+
+  </div>                                                                                              <!-- End of <div id="cipher" ...>             -->
+
+
+
+
+
+
+
+  <div id="Circular" class="w3-container city" style="display:none">    <!-- Begin  <div i="circular" ...>              -->
+    <h2>Disk Representation</h2>
+    <p>A ciphering method can be represent by two concentric disks.  </p>
+	<ul>
+		<li>You can click to turn around the inner disk. It turns clockwise if click on the right side of the canvas,
+		    and counter-clockwise if click on the left hand side of the canvas.
+		</li>
+		<li>You can also use the left right arrow keys to turn around the inner disk. Left arrow key turns it counter-clockwise,
+			and right arrow key turns it clockwise.
+		</li>
+		<li>You can also use your fingers to turn it around if your computer has a touch screen.</li>
+	</ul>	
+	<div style="position:relative;border:1px solid blue;width:500px;height:400px;">
+		<canvas id="canvas1" width="500px" height="400px" style="background-color:#333;">
+		</canvas>
+		<!--
+		<div class="triangle-up" onclick="turnAroundDisk(1);">       </div>
+		<div class="triangle-down" onclick="turnAroundDisk(-1);">   </div>
+		-->
+		
+		<audio id="turningMetalSound" style="display:none;">
+			<source src="tt.mp3" type="audio/mp3">
+		<!--	<source src="horse.mp3" type="audio/mpeg">  -->
+			Your browser does not support the audio element.
+		</audio>
+	</div> 
+ 
+ <!--
+	<div style="position:relative;max-height: 350px;max-width:600px;">
+		<div>
+		
+		</div>
+		<div style="max-height: 350px;max-width:600px;overflow: scroll;">
+          <canvas  id="canvas2" width="1700px" height="300px"  style="background-color: gray;"></canvas>
+		</div>  
+		<div>
+ 		  <div class="triangle-left" onclick="shiftUtencil(ctx2, -1);">&#8656;</div>
+		  <div class="triangle-right" onclick="shiftUtencil(ctx2, 1);">  &rArr;  </div>
+		</div>
+	</div>
+-->
+	
+
+</div>                                                                                              <!-- End of <div id="Circular" ...>            -->
+
+
+
+
+
+
+
+  <div id="Table" class="w3-container city" style="display:none">       <!-- Begin   <div id="Table" ...>               -->
+    <h2 class="w3-center">Table Representation</h2>
+
+
+    <h4 class="w3-teal"> 1. Brief Of The Table </h4>
+    <p>Besides the disk representation, a Caesar's shift can also be represent by a table. 
+Each row of the table lists 26 alphabets, starting with "A". If there are n many alphabets in the plaintext, then there will
+be n-many rows. </p>
+
+    <p> It is worthwhile to note that before </p>
+    <p>This is different than the so-called Vigenere table, where there are 26 rows and each row maybe already shfited. </p>
+
+    <p>Representing Caesar's shift in this way helps deciphering. You can make a utensil that crosses each row and 
+shows the ciphertext. Then, slide the utensil to the left. The plain text can be read after up to 25 slides.</p>
+
+    <br><br>
+
+
+
+    <h4 class="w3-teal">2. Show The Table For A Plaintext</h4>
+    <div  name="myForm" class="w3-container w3-border" style="width: 100%";>
+       <div class="w3-cell-row w3-border-bottom">
+       <div class="w3-container w3-cell w3-border-right" style="overflow: auto;">
+	    <label  for="inputPlaintext2">Enter a plaintext. All non-alphabetic symbols will be removed, 
+                                                               and the plaintext will be converted to
+                                                               upper case.</label><br>
+ 	   <input type="text" id="inputPlaintext2" name="inputPlaintext"><br>
+       </div>
+       <div class="w3-container w3-cell w3-cell-bottom">	
+	    <label for="cshiftOption2">Choose a shift:</label><br>
+	    <select id="cshiftOption2" name="cshiftOption2" >
+	    </select>
+       </div>
+       </div>
+       <br>
+       <button type="button" onclick="process_table();">Cipher</button>	
+
+   </div>
+
+    <div class="w3-card w3-padding" >
+            <p class="w3-border-bottom">Both plaintext and ciphertext can be represent by the following table. Alphabets in laintext are in green color, while
+            those of ciphertext are in blue color.</p>
+            <div class="container">
+			<div id="originalText2" class="w3-panel"></div>
+			<div id="cleanPlaintext2" class="w3-panel"></div>
+			<div id="shiftDistance2" class="w3-panel"></div>
+			<div id="ciphertextResult2" class="w3-panel"></div>
+    </div>	
+	<div class="w3-card w3-padding"  id="alphabetList2">
+	</div>
+   </div>	
+     <br><br>
+    <hr>
+
+  </div>              					         						<!-- End of  <div id="Table" ... >              -->
+
+
+
+
+
+
+
+
+
+  <div id="Decipher" class="w3-container city" style="display:none">  	<!-- Begin   <div id="Decipher" ...>          -->
+    <h2>Decipher</h2>
+    <p>Tokyo is the capital of Japan.</p>
+	<div  name="myForm" class="w3-container w3-border" style="width: 60%";>
+		<div class="w3-cell-row w3-border-bottom ">
+			<div class="w3-container w3-cell w3-border-right" style="overflow: auto;">
+				<label  for="deciphertext">Enter a plaintext. All non-alphabetic symbols will be removed, 
+                                                               and the plaintext will be converted to
+                                                               upper case.</label><br>
+				<input type="text" id="deciphertext" name="deciphertext"><br>
+			</div>
+		</div>
+		<br>
+		<button type="button" onclick="processCiphertext()">deCipher</button>	
+	</div>	
+	
+	<div style="position:relative;max-height: 400px;   max-width:500px;">
+		<div class="w3-cell-row w3-padding">
+			<div id="ciphertext" class="w3-cell"></div> <div id="plaintext" class="w3-cell"></div>	
+		</div>
+
+		<div style="max-height: 400px; max-width:500px;  overflow: scroll;">
+			<canvas  id="canvas"  width="1000px" height="400px"  style="background-color: gray; border:1px solid green;"></canvas>
+			<audio id="turningMetalSound" style="display:none;">
+				<source src="tt.mp3" type="audio/mp3">
+				<source src="horse.mp3" type="audio/mpeg">
+				Your browser does not support the audio element.
+			</audio>
+		</div>  
+		<div>
+			<div id="shiftLeft" class="triangleLeft" >       </div>
+			<div id="shiftRight" class="triangleRight" >   </div>
+		</div>	
+		<!--
+		<div>
+ 		  <div id="shiftLeft"  class="triangle-left">&#8656;</div>
+		  <div id="shiftRight" class="triangle-right">  &rArr;  </div>
+		</div>
+		-->
+	</div>
+  </div>																<!-- End of  <div id="Decipher" ...>          -->	
+</div>						         									<!-- End of  <div class="w3-container">   -->
+
+
+	<script src="./theJSfile.js"> </script>
+
+
+</body>
+</html>
